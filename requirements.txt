@@ -1,0 +1,7 @@
+numpy>=1.20.0
+pillow>=8.0.0
+opencv-python>=4.5.0
+asyncio>=3.4.3
+fastapi>=0.68.0
+uvicorn>=0.15.0
+python-multipart>=0.0.5 
