@@ -1,6 +1,14 @@
-# STL 3D Relief Generator
+# MCP STL 3D Relief Generator
 
-This project provides a web service that converts 2D images into 3D relief models in STL format, suitable for 3D printing or rendering.
+<div align="center">
+
+[中文](README_CN.md)
+·
+[Introduction to MCP](https://modelcontextprotocol.io/introduction)
+
+</div>
+
+This project provides a MCP server that converts 2D images into 3D relief models in STL format, suitable for 3D printing or rendering.
 
 ## Features
 
@@ -15,91 +23,76 @@ This project provides a web service that converts 2D images into 3D relief model
 
 ### Prerequisites
 
-- Python 3.9+
-- Docker (optional)
+- Python 3.10+
+- [uv](https://docs.astral.sh/uv/#installation)
 
 ### Option 1: Local Installation
 
 1. Clone the repository:
-```
+
+```bash
 git clone https://github.com/bigchx/mcp_3d_relief.git
 cd mcp_3d_relief
 ```
 
 2. Install dependencies:
-```
-pip install -r requirements.txt
+
+```bash
+uv pip sync .\requirements.txt
 ```
 
-3. Run the server:
-```
-uvicorn server:app --host 0.0.0.0 --port 8000 --reload
-```
+3. Run/Inspect the server:
 
-### Option 2: Docker
-
-1. Build the Docker image:
-```
-docker build -t mcp_3d_relief .
-```
-
-2. Run the container:
-```
-docker run -p 8000:8000 mcp_3d_relief
+```bash
+mcp run server.py
+mcp dev server.py
 ```
 
 ## Usage
 
-### Web API
+### JSON Configuration
 
-Once the server is running, access the API at http://localhost:8000.
+```json
+{
+  "mcpServers": {
+    "mcp_3d_relief": {
+      "command": "uv",
+      "args": ["--directory", "{fill_in_your_path_here}", "run", "server.py"]
+    }
+  }
+}
+```
 
-#### Convert an image to STL
+### MCP Tool Parameters
 
-Send a POST request to `/convert` with the following form data:
-
-- `file`: The image file to convert
+- `image_path`: Path to the image file
 - `model_width`: Width of the 3D model in mm (default: 50.0)
 - `model_thickness`: Maximum thickness/height of the 3D model in mm (default: 5.0)
 - `base_thickness`: Thickness of the base in mm (default: 2.0)
-- `skip_depth_conversion`: Whether to use the image directly or generate a depth map (default: true)
+- `skip_depth`: Whether to use the image directly or generate a depth map (default: true)
 - `invert_depth`: Invert the relief (bright areas become low instead of high) (default: false)
 - `detail_level`: Controls the resolution of the processed image (default: 1.0). At detail_level = 1.0, the image is processed at 320px resolution, producing an STL file typically under 100MB. Higher values improve detail quality but significantly increase both processing time and STL file size. For example, doubling the detail_level can increase file size by 4x or more. Use with caution.
 
-Example using curl:
-```
-curl -X POST http://localhost:8000/convert \
-  -F "file=@path/to/your/image.jpg" \
-  -F "model_width=50" \
-  -F "model_thickness=5" \
-  -F "base_thickness=2" \
-  -F "skip_depth_conversion=true" \
-  -F "invert_depth=false" \
-  -F "detail_level=1.0"
-```
-
 ### Response
 
-The API returns a JSON response with:
+The MCP Tool returns a JSON response with:
 
 ```json
 {
   "status": "success",
-  "depth_map_path": "output/yourimage_depth_map.png",
-  "stl_path": "output/yourimage.stl",
-  "depth_map_url": "/files/yourimage_depth_map.png",
-  "stl_url": "/files/yourimage.stl"
+  "depth_map_path": "path/to/yourimage_depth_map.png",
+  "stl_path": "path/to/yourimage.stl"
 }
 ```
 
-You can access the generated files directly via the provided URLs.
+Where LLMs can access the generated files from this MCP server, using the provided URLs.
 
 ### Command Line
 
-You can also use the script directly from the command line:
+You can also use the script directly from the command line to generate a relief model from an image:
 
-```
-python mcp_3d_relief.py '{"input_image": "example.jpg", "model_width": 50, "model_thickness": 5}'
+```bash
+python3 relief.py path/to/your/image.jpg
 ```
 
 ### External Depth Map Generation
@@ -120,6 +113,17 @@ This approach can provide better 3D relief models, especially for complex images
 3. A base is added to the bottom of the model
 4. The model is saved as an STL file
 
-## License
+## Our partners
 
-This project is licensed under the MIT License - see the LICENSE file for details. 
+<div style="display: flex; justify-content: center; align-items: center; gap: 20px; margin: 30px 0;">
+  <div style="flex: 1; text-align: center; padding: 15px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: all 0.2s ease-in-out; max-width: 300px; hover:transform: translateY(-5px); hover:box-shadow: 0 6px 16px rgba(0,0,0,0.15);">
+    <a href="https://www.voxeldance.com/" style="display: block; height: 100%;">
+      <img src="images/voxeldance.png" alt="voxeldance" style="max-width: 100%; height: auto; object-fit: contain; transition: opacity 0.2s ease-in-out;">
+    </a>
+  </div>
+  <div style="flex: 1; text-align: center; padding: 15px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: all 0.2s ease-in-out; max-width: 300px; hover:transform: translateY(-5px); hover:box-shadow: 0 6px 16px rgba(0,0,0,0.15);">
+    <a href="https://www.3dzyk.cn/" style="display: block; height: 100%;">
+      <img src="images/3dzyk.png" alt="3dzyk" style="max-width: 100%; height: auto; object-fit: contain; transition: opacity 0.2s ease-in-out;">
+    </a>
+  </div>
+</div>

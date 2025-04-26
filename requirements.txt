@@ -5,3 +5,5 @@ asyncio>=3.4.3
 fastapi>=0.68.0
 uvicorn>=0.15.0
 python-multipart>=0.0.5 
+fastmcp>=2.2.2
+aiohttp>=3.8.2

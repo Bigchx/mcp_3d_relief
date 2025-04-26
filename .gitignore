@@ -1,2 +1,8 @@
 output/
 uploads/
+
+__pycache__/
+.venv
+uv.lock
+
+*.log

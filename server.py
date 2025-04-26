@@ -1,69 +1,61 @@
 import os
-import uuid
-import uvicorn
-from fastapi import FastAPI, File, UploadFile, Form, BackgroundTasks
-from fastapi.responses import JSONResponse
-from fastapi.staticfiles import StaticFiles
-import shutil
-from mcp_3d_relief import main
-import asyncio
+from typing import Annotated
+
+from fastapi import FastAPI, Form
+from fastmcp import FastMCP
+from pydantic import Field
+
+from relief import relief
 
 app = FastAPI(title="STL 3D RELIEF MCP Server")
 
 os.makedirs("uploads", exist_ok=True)
 os.makedirs("output", exist_ok=True)
 
-app.mount("/files", StaticFiles(directory="output"), name="files")
 
 @app.post("/convert")
 async def convert_image(
-    background_tasks: BackgroundTasks,
-    file: UploadFile = File(...),
+    image_path: Annotated[
+        str,
+        Field(
+            description="2 possible options on this paramater: "
+            "1. Path to the image file. (Save the image locally and return the path to the file. Delete the file after processing this tool.)"
+            "2. Online image URL. (Provide the original image URL, or upload the image to a public server and provide the URL.)",
+        ),
+    ],
     model_width: float = Form(50.0),
     model_thickness: float = Form(5.0),
     base_thickness: float = Form(2.0),
-    skip_depth_conversion: bool = Form(True),
-    invert_depth: bool = Form(False)
-):
-    original_filename = file.filename
-    file_extension = os.path.splitext(original_filename)[1]
-    
-    file_id = str(uuid.uuid4())
-    file_location = f"uploads/{file_id}{file_extension}"
-    
-    with open(file_location, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
-    
-    args = {
-        'input_image': file_location,
-        'model_width': model_width,
-        'model_thickness': model_thickness,
-        'base_thickness': base_thickness,
-        'output_dir': 'output',
-        'skip_depth_conversion': skip_depth_conversion,
-        'invert_depth': invert_depth
-    }
-    
-    result = await main(args)
-    
-    if result.get("status") == "success":
-        depth_map_filename = os.path.basename(result["depth_map_path"])
-        stl_filename = os.path.basename(result["stl_path"])
-        
-        result["depth_map_url"] = f"/files/{depth_map_filename}"
-        result["stl_url"] = f"/files/{stl_filename}"
-        
-        background_tasks.add_task(cleanup_upload, file_location)
-    
+    skip_depth: bool = Form(False),
+    invert_depth: bool = Form(False),
+    detail_level: float = Form(1.0),
+) -> dict:
+    """
+    Convert an image to a 3D relief STL file.
+
+    Args:
+        image_path (str): Local path or web URL to the input image file.
+        model_width (float): Width of the model in mm.
+        model_thickness (float): Thickness of the model in mm.
+        base_thickness (float): Thickness of the base in mm.
+        skip_depth (bool): Whether to skip depth conversion.
+        invert_depth (bool): Whether to invert depth.
+        detail_level (float): Detail level for depth map generation.
+    """
+    result = await relief(
+        input_image_path=image_path,
+        model_width=model_width,
+        model_thickness=model_thickness,
+        base_thickness=base_thickness,
+        output_dir="output",
+        skip_depth=skip_depth,
+        invert_depth=invert_depth,
+        detail_level=detail_level,
+    )
     return result
 
-def cleanup_upload(file_path):
-    if os.path.exists(file_path):
-        os.remove(file_path)
 
-@app.get("/")
-async def root():
-    return {"message": "Welcome to STL 3D RELIEF MCP SERVER", "version": "1.0.0"}
+mcp = FastMCP.from_fastapi(app, "mcp_3d_relief")
 
 if __name__ == "__main__":
-    uvicorn.run("server:app", host="0.0.0.0", port=8000, reload=True) 
+    mcp.run(transport="stdio")
