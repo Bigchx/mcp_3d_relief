@@ -102,7 +102,7 @@ For higher quality depth maps, you can use external depth map generation service
 1. Visit [https://huggingface.co/spaces/depth-anything/Depth-Anything-V2](https://huggingface.co/spaces/depth-anything/Depth-Anything-V2)
 2. Upload your image to generate a depth map
 3. Download the generated depth map
-4. Use this depth map with our converter by setting `skip_depth_conversion=false`
+4. Use this depth map with our converter by setting `skip_depth=false`
 
 This approach can provide better 3D relief models, especially for complex images.
 

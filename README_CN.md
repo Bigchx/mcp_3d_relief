@@ -94,7 +94,7 @@ python3 relief.py path/to/your/image.jpg
 1. 访问 [https://huggingface.co/spaces/depth-anything/Depth-Anything-V2](https://huggingface.co/spaces/depth-anything/Depth-Anything-V2)
 2. 上传您的图像以生成深度图
 3. 下载生成的深度图
-4. 将此深度图与我们的转换器一起使用，设置 `skip_depth_conversion=false`
+4. 将此深度图与我们的转换器一起使用，设置 `skip_depth=false`
 
 这种方法可以提供更好的 3D 浮雕模型，特别是对于复杂图像。
 
