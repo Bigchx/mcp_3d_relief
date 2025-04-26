@@ -56,7 +56,7 @@ mcp dev server.py
 
 ### MCP 工具参数
 
-- `image_path`：要转换的图像路径
+- `image_path`：要转换的图像本地路径或 URL
 - `model_width`：3D 模型的宽度（毫米，默认：50.0）
 - `model_thickness`：3D 模型的最大厚度/高度（毫米，默认：5.0）
 - `base_thickness`：底座厚度（毫米，默认：2.0）

@@ -64,7 +64,7 @@ mcp dev server.py
 
 ### MCP Tool Parameters
 
-- `image_path`: Path to the image file
+- `image_path`: Local path or web URL to the input image file
 - `model_width`: Width of the 3D model in mm (default: 50.0)
 - `model_thickness`: Maximum thickness/height of the 3D model in mm (default: 5.0)
 - `base_thickness`: Thickness of the base in mm (default: 2.0)
