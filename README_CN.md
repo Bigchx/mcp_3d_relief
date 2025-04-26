@@ -9,7 +9,6 @@
 - 可为 3D 模型添加可选底座
 - 可反转深度以获得不同的浮雕效果
 - 快速处理，立即提供下载链接
-- 简单的 REST API 接口
 
 ## 安装
 
@@ -30,7 +29,7 @@ cd mcp_3d_relief
 2. 安装依赖：
 
 ```bash
-uv pip sync .\requirements.txt
+uv pip sync requirements.txt
 ```
 
 3. 运行/调试服务器：

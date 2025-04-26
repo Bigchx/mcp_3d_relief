@@ -17,7 +17,6 @@ This project provides a MCP server that converts 2D images into 3D relief models
 - Add optional base to the 3D model
 - Invert depth for different relief effects
 - Fast processing with immediate download links
-- Simple REST API interface
 
 ## Installation
 
@@ -38,7 +37,7 @@ cd mcp_3d_relief
 2. Install dependencies:
 
 ```bash
-uv pip sync .\requirements.txt
+uv pip sync requirements.txt
 ```
 
 3. Run/Inspect the server:
