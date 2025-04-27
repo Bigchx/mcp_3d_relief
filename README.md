@@ -5,6 +5,8 @@
 [中文](README_CN.md)
 ·
 [Introduction to MCP](https://modelcontextprotocol.io/introduction)
+·
+[Wiki](https://deepwiki.com/Bigchx/mcp_3d_relief)
 
 </div>
 

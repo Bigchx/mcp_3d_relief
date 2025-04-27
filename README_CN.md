@@ -1,5 +1,13 @@
 # MCP STL 3D 浮雕生成器
 
+<div align="center">
+
+[MCP 简介](https://modelcontextprotocol.io/introduction)
+·
+[Wiki](https://deepwiki.com/Bigchx/mcp_3d_relief)
+
+</div>
+
 本项目提供一个 MCP server，能够将 2D 图像转换为 STL 格式的 3D 浮雕模型，适用于 3D 打印或渲染。
 
 ## 功能特点
